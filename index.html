@@ -1,0 +1,333 @@
+﻿<!DOCTYPE html>
+<html manifest="offline.appcache">
+<head>
+    <meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>Prince Diponegoro - 2D Adventure Game</title>
+	
+	<!-- Standardised web app manifest -->
+	<link rel="manifest" href="appmanifest.json" />
+	
+	<!-- Allow fullscreen mode on iOS devices. (These are Apple specific meta tags.) -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<link rel="apple-touch-icon" sizes="256x256" href="icon-256.png" />
+	<meta name="HandheldFriendly" content="true" />
+	
+	<!-- Chrome for Android web app tags -->
+	<meta name="mobile-web-app-capable" content="yes" />
+	<link rel="shortcut icon" sizes="256x256" href="icon-256.png" />
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --navy-dark: #0a1628;
+            --navy-medium: #1a237e;
+            --navy-light: #283593;
+            --orange-primary: #ff6f00;
+            --orange-light: #ff8f00;
+            --orange-dark: #e65100;
+            --text-light: #ffffff;
+            --text-muted: #b0bec5;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-medium) 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Navigation */
+        nav {
+            background: rgba(10, 22, 40, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--orange-primary);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--orange-primary);
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--orange-primary);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(10, 22, 40, 0.8) 0%, rgba(26, 35, 126, 0.6) 100%);
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--orange-primary), var(--orange-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        
+        .play-btn {
+            background: linear-gradient(135deg, var(--orange-primary), var(--orange-dark));
+            color: white;
+            padding: 1rem 3rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .play-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 111, 0, 0.4);
+        }
+        
+        /* Game Container */
+        .game-section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .game-container {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 2px solid var(--navy-light);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        
+        #c2canvasdiv {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 600px;
+        }
+        
+        #c2canvas {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .features h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--orange-primary);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background: rgba(26, 35, 126, 0.3);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid var(--navy-light);
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--orange-primary);
+        }
+        
+        .feature-card h3 {
+            color: var(--orange-light);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .feature-card p {
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--navy-dark);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 2px solid var(--navy-light);
+            margin-top: 4rem;
+        }
+        
+        footer p {
+            color: var(--text-muted);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .game-container {
+                padding: 1rem;
+            }
+        }
+        
+        /* Canvas specific styles for Construct2 */
+        canvas {
+            touch-action-delay: none;
+            touch-action: none;
+            -ms-touch-action: none;
+        }
+    </style>
+</head> 
+ 
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">🎮 Prince Diponegoro</a>
+            <div class="nav-links">
+                <a href="#game">Play</a>
+                <a href="#features">Features</a>
+                <a href="#about">About</a>
+            </div>
+        </div>
+    </nav>
+    
+    <section class="hero">
+        <h1>Prince Diponegoro</h1>
+        <p>Embark on an epic 2D adventure through the legendary journey of Prince Diponegoro. Experience the thrill of battle and the spirit of resistance.</p>
+        <a href="#game" class="play-btn">▶ Play Now</a>
+    </section>
+    
+    <section id="game" class="game-section">
+        <div class="game-container">
+            <div id="c2canvasdiv">
+                <canvas id="c2canvas" width="1708" height="960">
+                    <h1>Your browser does not appear to support HTML5. Try upgrading your browser to the latest version.</h1>
+                </canvas>
+            </div>
+        </div>
+    </section>
+    
+    <section id="features" class="features">
+        <h2>Game Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>⚔️ Epic Battles</h3>
+                <p>Engage in intense 2D combat with smooth controls and responsive gameplay mechanics.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🎯 Challenging Levels</h3>
+                <p>Navigate through multiple levels with increasing difficulty and unique challenges.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🎨 Beautiful Graphics</h3>
+                <p>Enjoy stunning 2D artwork and animations that bring the story to life.</p>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <p>© 2024 Prince Diponegoro Game. Built with Construct 2.</p>
+    </footer>
+    
+    <div id="fb-root"></div>
+	
+	<script>
+	// Issue a warning if trying to preview an exported project on disk.
+	(function(){
+		if (window.location.protocol.substr(0, 4) === "file")
+		{
+			alert("Exported games won't work until you upload them. (When running on the file:/// protocol, browsers block many features from working for security reasons.)");
+		}
+	})();
+	</script>
+	
+	<!-- Pages load faster with scripts at the bottom -->
+	<script src="jquery-2.1.1.min.js"></script>
+	<script src="c2runtime.js"></script>
+
+    <script>
+		jQuery(document).ready(function ()
+		{			
+			cr_createRuntime("c2canvas");
+		});
+		
+		function onVisibilityChanged() {
+			if (document.hidden || document.mozHidden || document.webkitHidden || document.msHidden)
+				cr_setSuspended(true);
+			else
+				cr_setSuspended(false);
+		};
+		
+		document.addEventListener("visibilitychange", onVisibilityChanged, false);
+		document.addEventListener("mozvisibilitychange", onVisibilityChanged, false);
+		document.addEventListener("webkitvisibilitychange", onVisibilityChanged, false);
+		document.addEventListener("msvisibilitychange", onVisibilityChanged, false);
+		
+		if (navigator.serviceWorker && navigator.serviceWorker.register)
+		{
+			navigator.serviceWorker.register("sw.js", { scope: "./" });
+		}
+    </script>
+</body> 
+</html> 
