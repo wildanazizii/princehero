@@ -1,5 +1,5 @@
 ﻿CACHE MANIFEST
-#1779247815
+#1779250568
 data.js
 c2runtime.js
 jquery-2.1.1.min.js
@@ -148,8 +148,6 @@ images/slash-sheet1.png
 images/slash-sheet2.png
 images/light1-sheet0.png
 images/npc4-sheet0.png
-images/npc4-sheet1.png
-images/npc4-sheet2.png
 images/npc1-sheet0.png
 images/npc3-sheet0.png
 images/npc3-sheet1.png
@@ -261,6 +259,7 @@ images/1jump-sheet0.png
 images/1pound-sheet0.png
 images/1slash-sheet0.png
 images/sun-sheet0.png
+images/tiledbackground20.png
 media/boom1.m4a
 media/boom1.ogg
 media/boom2.m4a
